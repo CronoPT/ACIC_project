@@ -26,15 +26,15 @@ void loop() {
   curr_millis = millis();
   if( curr_millis-prev_millis >= INTERVAL ){
     prev_millis = curr_millis;
-    
-    leds[led_on].on();
-    if(led_on = LEDS-1) {
+
+    if(led_on == LEDS) {
       for(int i=0; i<LEDS; i++) {
         leds[i].off();
       }
       led_on = -1; //just because led_on++ will run after
     }
-    led_on++;
+    
+    leds[led_on++].on();
   }
  
 }
