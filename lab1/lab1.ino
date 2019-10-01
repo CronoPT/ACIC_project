@@ -33,8 +33,11 @@ void loop() {
       }
       led_on = -1; //just because led_on++ will run after
     }
-    
-    leds[led_on++].on();
+    else if(led_on != -1) {
+      leds[led_on].on();
+    }
+
+    led_on += 1;
   }
  
 }
