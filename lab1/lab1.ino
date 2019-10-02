@@ -3,11 +3,10 @@
 
 #define LEDS 4
 #define INTERVAL 1000
-#define BUTTON_PIN 8
+#define BUTTON_PIN 2
 
-int led_pins[] = {2, 3, 4, 5};
+int led_pins[] = {3, 4, 5, 6};
 led leds[LEDS]; 
-button button;
 
 unsigned long prev_millis = 0;
 unsigned long curr_millis = 0;
@@ -17,27 +16,17 @@ int led_on = 0;
 bool blinking = true;
 
 void setup() {
+
+  attachInterrupt( digitalPinToInterrupt(BUTTON_PIN), call_back, RISING);
   for(int i=0; i<LEDS; i++) {
     leds[i].set_pin(led_pins[i]);
   }
-
-  button.set_pin(BUTTON_PIN);
+  Serial.begin(9600);
 }
 
 void loop() {
   
   curr_millis = millis();
-  if(button.pressed()){
-    delay(200);
-    if(blinking)
-      time_gap = curr_millis - prev_millis;
-    else
-      prev_millis = millis() - time_gap;
-    blinking = !blinking;
-  }
-    
-    
-    
   if(blinking) {
     if( curr_millis-prev_millis >= INTERVAL ){
       prev_millis = curr_millis;
@@ -56,4 +45,17 @@ void loop() {
       led_on  += 1;
     }
   }
+  
+}
+
+void call_back() {
+  detachInterrupt(BUTTON_PIN);
+  curr_millis = millis();
+  if(blinking)
+    time_gap = curr_millis - prev_millis;
+  else
+    prev_millis = millis() - time_gap;
+  blinking = !blinking;
+  Serial.println("Hello");
+  attachInterrupt( digitalPinToInterrupt(BUTTON_PIN), call_back, RISING);
 }
