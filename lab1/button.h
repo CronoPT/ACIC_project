@@ -14,5 +14,5 @@ class button {
     pinMode(_pin, INPUT);
   }
 
-  bool button_pressed() { return digitalRead(_pin) == LOW; }
+  bool pressed() { return digitalRead(_pin) == HIGH; }
 };

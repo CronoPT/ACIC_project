@@ -11,7 +11,10 @@ button button;
 
 unsigned long prev_millis = 0;
 unsigned long curr_millis = 0;
+unsigned long time_gap    = 0; 
 int led_on = 0;
+
+bool blinking = true;
 
 void setup() {
   for(int i=0; i<LEDS; i++) {
@@ -22,22 +25,35 @@ void setup() {
 }
 
 void loop() {
-
+  
   curr_millis = millis();
-  if( curr_millis-prev_millis >= INTERVAL ){
-    prev_millis = curr_millis;
-
-    if(led_on == LEDS) {
-      for(int i=0; i<LEDS; i++) {
-        leds[i].off();
-      }
-      led_on = -1; //just because led_on++ will run after
-    }
-    else if(led_on != -1) {
-      leds[led_on].on();
-    }
-
-    led_on += 1;
+  if(button.pressed()){
+    delay(200);
+    if(blinking)
+      time_gap = curr_millis - prev_millis;
+    else
+      prev_millis = millis() - time_gap;
+    blinking = !blinking;
   }
- 
+    
+    
+    
+  if(blinking) {
+    if( curr_millis-prev_millis >= INTERVAL ){
+      prev_millis = curr_millis;
+  
+      if(led_on == LEDS) {
+        for(int i=0; i<LEDS; i++)
+          leds[i].off();
+        led_on  = -1; //just because led_on++ will run after
+      }
+      else if(led_on != -1) {
+        leds[led_on].on();
+        if(led_on-1 >= 0)
+          leds[led_on-1].off();
+      }
+  
+      led_on  += 1;
+    }
+  }
 }
