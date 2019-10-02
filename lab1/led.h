@@ -10,7 +10,7 @@ class led {
     digitalWrite(_pin, LOW); 
   }
 
-  led(){ } //needed for when you want a led vector
+  led(){ /*Do nothing*/ }
 
   virtual void set_pin(int pin){
     _pin = pin;
