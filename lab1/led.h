@@ -1,3 +1,5 @@
+#ifndef __LED_H__
+#define __LED_H__
 
 class led {
   int _pin;
@@ -20,3 +22,5 @@ class led {
 
   void off(){ digitalWrite(_pin, LOW); }
 };
+
+#endif

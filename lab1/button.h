@@ -1,3 +1,5 @@
+#ifndef __BUTTON_H__
+#define __BUTTON_H__
 
 class button {
   int _pin;
@@ -16,3 +18,5 @@ class button {
 
   bool pressed() { return digitalRead(_pin) == HIGH; }
 };
+
+#endif
