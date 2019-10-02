@@ -49,13 +49,10 @@ void loop() {
 }
 
 void call_back() {
-  detachInterrupt(BUTTON_PIN);
   curr_millis = millis();
   if(blinking)
     time_gap = curr_millis - prev_millis;
   else
     prev_millis = millis() - time_gap;
   blinking = !blinking;
-  Serial.println("Hello");
-  attachInterrupt( digitalPinToInterrupt(BUTTON_PIN), call_back, RISING);
 }
