@@ -1,18 +1,20 @@
 #include "led.h"
 #include "null_led.h"
 #include "interval.h"
+#include "debounced_button.h"
 
 #define LEDS 4
 #define INTERVAL 1000
-#define BUTTON_PIN 2
+#define BUTTON_PIN 8
 
 led* leds[LEDS+1];
 
-int led_pins[] = {3, 4, 5, 6};
+int led_pins[] = {2, 3, 4, 5};
 int led_on     = 0;
 int led_off    = LEDS;
 
-interval led_interval = interval(INTERVAL);
+interval led_interval    = interval(INTERVAL);
+debounced_button* button = nullptr;
 
 bool blinking = true;
 
@@ -21,17 +23,26 @@ bool blinking = true;
 ==============================================================*/
 void setup() {
   Serial.begin(9600);
-  attachInterrupt( digitalPinToInterrupt(BUTTON_PIN), call_back, RISING);
   
   for(int i=0; i<LEDS; i++)
     leds[i]  = new led(led_pins[i]);
   leds[LEDS] = new null_led(); 
+  button     = new debounced_button(BUTTON_PIN);
 }
 
 /*==============================================================
 | loop
 ==============================================================*/
 void loop() {
+  if( button->pressed() ) {
+    print("Hello")
+    if(blinking)
+      led_interval.freeze();
+    else
+      led_interval.unfreeze();
+    blinking = !blinking;
+  }
+  
   if(blinking) {
     if( led_interval.passed() ){
       leds[led_on]->on();
@@ -41,15 +52,4 @@ void loop() {
       led_off = (led_off+1) % LEDS+1;
     }
   }
-}
-
-/*==============================================================
-| call_back
-==============================================================*/
-void call_back() {
-  if(blinking)
-    led_interval.freeze();
-  else
-    led_interval.unfreeze();
-  blinking = !blinking;
 }
