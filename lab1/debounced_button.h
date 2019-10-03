@@ -4,8 +4,17 @@
 #define DEBOUNCE_DELAY 50
 
 /*
+|
 | This class was written based on the web page:
 | https://www.arduino.cc/en/Tutorial/debounce
+|
+| The way it works is very simple, it only says 
+| that the button was pressed or not if the
+| the button as been as it is for more than
+| DEBOUNCE_DELAY millisconds. This is to make sure 
+| that noise caused by bouncing the button up and
+| down won't cause various button presses.
+|
 */
 
 class debounced_button {
