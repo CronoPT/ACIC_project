@@ -22,8 +22,6 @@ bool blinking = true;
 | setup
 ==============================================================*/
 void setup() {
-  Serial.begin(9600);
-  
   for(int i=0; i<LEDS; i++)
     leds[i]  = new led(led_pins[i]);
   leds[LEDS] = new null_led(); 
@@ -35,7 +33,6 @@ void setup() {
 ==============================================================*/
 void loop() {
   if( button->pressed() ) {
-    print("Hello")
     if(blinking)
       led_interval.freeze();
     else
@@ -48,8 +45,8 @@ void loop() {
       leds[led_on]->on();
       leds[led_off]->off();
       
-      led_on  = (led_on +1) % LEDS+1;
-      led_off = (led_off+1) % LEDS+1;
+      led_on  = (led_on +1) % (LEDS+1);
+      led_off = (led_off+1) % (LEDS+1);
     }
   }
 }
