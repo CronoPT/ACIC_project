@@ -1,25 +1,40 @@
 #include "pwm_led.h"
 #include "blinking_led.h"
-#include "potentiometer.h"
+#include "analog_sensor.h"
 
 #define PWM_LED_PIN 3
 #define BLI_LED_PIN 5
-#define POT_PIN A3
+#define POT_PIN     A3
+#define LIGHT_PIN   A1
 
-pwm_led*       pwm_led_ = nullptr;
+//the brightness values for the pwm led
+#define MAX_BRI 255
+#define MIN_BRI 0
+
+//the period values for the led blinking
+#define MAX_T 2000 
+#define MIN_T 200
+
+pwm_led*       pul_led = nullptr;
 blinking_led*  bli_led = nullptr;
-potentiometer* pot     = nullptr;
+analog_sensor* pot     = nullptr;
+analog_sensor* light   = nullptr;
 
 void setup() {
-  pwm_led_ = new pwm_led(PWM_LED_PIN);
-  bli_led  = new blinking_led(BLI_LED_PIN, 200);
-  pot = new potentiometer(POT_PIN);
+  pul_led = new pwm_led(PWM_LED_PIN);
+  bli_led = new blinking_led(BLI_LED_PIN, MIN_T);
+  pot     = new analog_sensor(POT_PIN);
+  light   = new analog_sensor(LIGHT_PIN);
+
+  Serial.begin(9600);
+  Serial.println("Calibration starting");
+  light->callibrate();
+  Serial.println("Calibration ending");
 }
 
 void loop() {
-  int analog_read = pot->get_read();
-  int brightness = map(analog_read, 0, 1023, 0, 255);
-  int interval   = map(analog_read, 0, 1023, 200, 2000);
-  pwm_led_->set_brightness(brightness);
+  int brightness = light->get_read_scaled_back(MIN_BRI, MAX_BRI);
+  int interval   = pot->get_read_scaled(MIN_T, MAX_T);
+  pul_led->set_brightness(brightness);
   bli_led->set_interval(interval);
 }

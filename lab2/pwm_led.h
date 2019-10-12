@@ -2,7 +2,7 @@
 #define __PWM_LED_H__
 
 class pwm_led {
-  int _pin;
+  int _pin; //must be a PWM pin
 
   public:
   pwm_led(int pin):_pin(pin) {
