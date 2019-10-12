@@ -42,18 +42,38 @@ void setup() {
 }
 
 void loop() {
-  int brightness = light->get_read_scaled_backwards(MIN_BRI, MAX_BRI);
-  int interval   = pot->get_read_scaled(MIN_T, MAX_T);
-  double temperature = analog_to_temperature( temp->get_read() );
-  pul_led->set_brightness(brightness);
-  bli_led->set_interval(interval);
-
-  if( analog_to_temperature(temp->get_read()) > TEMP_TRESH )
-     std_led->on();
-  else
-    std_led->off();
+  set_blinking_led_interval( read_potentiometer()    );
+  set_pwm_led_brightness(    read_room_brightness()  );
+  set_std_led_state(         read_room_temperature() );
 }
 
 double analog_to_temperature(int analog_read) {
   return ((analog_read)*(5.0/1024.0)-0.5)*100;
+}
+
+int read_potentiometer() {
+  return pot->get_read_scaled(MIN_T, MAX_T);
+}
+
+void set_blinking_led_interval(int interval) {
+  bli_led->set_interval(interval);
+}
+
+int read_room_brightness() {
+  return light->get_read_scaled_backwards(MIN_BRI, MAX_BRI);
+}
+
+void set_pwm_led_brightness(int brightness) {
+  pul_led->set_brightness(brightness);
+}
+
+double read_room_temperature() {
+  return analog_to_temperature( temp->get_read() );
+}
+
+void set_std_led_state(double temperature) {
+  if( analog_to_temperature(temp->get_read()) > TEMP_TRESH )
+     std_led->on();
+  else
+    std_led->off();
 }
