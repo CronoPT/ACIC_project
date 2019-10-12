@@ -9,10 +9,10 @@ class blinking_led {
   interval _interval;
 
   public:
-  blinking_led(int pin, int interval):
+  blinking_led(int pin):
     _pin(pin),
     _state(LOW),
-    _interval(interval) {
+    _interval(10000) {
     pinMode(_pin, OUTPUT);
     analogWrite(_pin, 0);
   }

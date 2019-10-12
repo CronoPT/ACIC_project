@@ -26,17 +26,15 @@ class analog_sensor {
       _max_reading = _max_reading>reading ? _max_reading : reading; 
     }
   }
-  
-  int get_read() { 
-    return analogRead(_pin);
-  }
 
+  int get_read() { return analogRead(_pin); }
+  
   int get_read_scaled(int scale_min, int scale_max) {
     int mapped_value = map(get_read(), _min_reading, _max_reading, scale_min, scale_max);
     return constrain(mapped_value, scale_min, scale_max);
   }
 
-  int get_read_scaled_back(int scale_min, int scale_max) {
+  int get_read_scaled_backwards(int scale_min, int scale_max) {
     int mapped_value = map(get_read(), _max_reading, _min_reading, scale_min, scale_max);
     return constrain(mapped_value, scale_min, scale_max);
   }
