@@ -27,6 +27,9 @@ analog_sensor* pot     = nullptr;
 analog_sensor* light   = nullptr;
 analog_sensor* temp    = nullptr;
 
+/*======================================================
+| setup
+======================================================*/
 void setup() {
   pul_led = new pwm_led(PWM_LED_PIN);
   bli_led = new blinking_led(BLI_LED_PIN);
@@ -41,6 +44,9 @@ void setup() {
   Serial.println("Calibration ending");
 }
 
+/*======================================================
+| loop
+======================================================*/
 void loop() {
   set_blinking_led_interval( read_potentiometer()    );
   set_pwm_led_brightness(    read_room_brightness()  );
@@ -51,6 +57,15 @@ double analog_to_temperature(int analog_read) {
   return ((analog_read)*(5.0/1024.0)-0.5)*100;
 }
 
+/*======================================================
+| Our hope with this task model, from what we searched
+| about the I2C interface on the arduino, is that we 
+| can just reemplement the "read" tasks in the slave
+| arduino to receive the values from the I2C interface
+| and the "set" tasks in the master arduino to send
+| the values through the I2C interface and everything
+| sould work properly without forther adjustments.
+======================================================*/
 int read_potentiometer() {
   return pot->get_read_scaled(MIN_T, MAX_T);
 }

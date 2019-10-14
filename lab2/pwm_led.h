@@ -1,6 +1,10 @@
 #ifndef __PWM_LED_H__
 #define __PWM_LED_H__
 
+/*======================================================
+| A led whose intensity we can control, for this, it
+| must be connected to a pwm pin 
+======================================================*/
 class pwm_led {
   int _pin; //must be a PWM pin
 

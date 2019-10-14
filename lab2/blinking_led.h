@@ -3,6 +3,9 @@
 
 #include "interval.h"
 
+/*======================================================
+| A type of led that blinks accordingly to _interval
+======================================================*/
 class blinking_led {
   int _pin;
   int _state;

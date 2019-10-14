@@ -1,6 +1,9 @@
 #ifndef __LED_H__
 #define __LED_H__
 
+/*======================================================
+| A simple led that can be turned on and off
+======================================================*/
 class led {
   int _pin;
 
