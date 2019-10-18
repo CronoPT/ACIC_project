@@ -28,6 +28,8 @@ void setup() {
   light  = new analog_sensor(LIGHT_PIN);
   thermo = new thermostat(TEMP_THRESH, TEMP_PIN);
 
+  Wire.begin();
+  
   Serial.begin(9600);
   Serial.println("Calibration starting");
   light->callibrate();
@@ -51,7 +53,9 @@ int get_blinking_led_interval() {
 }
 
 void set_blinking_led_interval(int interval) {
-  /*Implement with Wire*/
+  Wire.write("BLI"); 
+  Wire.write(interval);    //first byte conting from the left
+  Wire.write(interval>>8); //second byte conting from the left
 }
 
 int get_pwm_led_brightness() {
@@ -59,7 +63,9 @@ int get_pwm_led_brightness() {
 }
 
 void set_pwm_led_brightness(int brightness) {
-  /*Implement with Wire*/
+  Wire.write("BRI");
+  Wire.write(brightness);    //first byte conting from the left
+  Wire.write(brightness>>8); //second byte conting from the left
 }
 
 int get_std_led_state() {
@@ -67,5 +73,7 @@ int get_std_led_state() {
 }
 
 void set_std_led_state(int state) {
-  /*Implement with Wire*/
+  Wire.write("STD");
+  Wire.write(state);    //first byte conting from the left
+  Wire.write(state>>8); //second byte conting from the left
 }
