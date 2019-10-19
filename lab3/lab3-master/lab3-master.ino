@@ -14,7 +14,7 @@
 #define MAX_T 2000 
 #define MIN_T 200
 
-#define TEMP_THRESH 24
+#define TEMP_THRESH 17
 
 analog_sensor* pot    = nullptr;
 analog_sensor* light  = nullptr;
@@ -29,7 +29,6 @@ void setup() {
   thermo = new thermostat(TEMP_THRESH, TEMP_PIN);
 
   Wire.begin();
-  
   Serial.begin(9600);
   Serial.println("Calibration starting");
   light->callibrate();
@@ -53,9 +52,11 @@ int get_blinking_led_interval() {
 }
 
 void set_blinking_led_interval(int interval) {
+  Wire.beginTransmission(0x53);
   Wire.write("BLI"); 
-  Wire.write(interval);    //first byte conting from the left
-  Wire.write(interval>>8); //second byte conting from the left
+  Wire.write( (byte)(interval>>8) ); //second byte counting from the left
+  Wire.write( (byte) interval );     //first byte counting from the left
+  Wire.endTransmission();
 }
 
 int get_pwm_led_brightness() {
@@ -63,9 +64,11 @@ int get_pwm_led_brightness() {
 }
 
 void set_pwm_led_brightness(int brightness) {
+  Wire.beginTransmission(0x53);
   Wire.write("BRI");
-  Wire.write(brightness);    //first byte conting from the left
-  Wire.write(brightness>>8); //second byte conting from the left
+  Wire.write( (byte)(brightness>>8) ); //second byte counting from the left
+  Wire.write( (byte) brightness );     //first byte counting from the left
+  Wire.endTransmission();
 }
 
 int get_std_led_state() {
@@ -73,7 +76,9 @@ int get_std_led_state() {
 }
 
 void set_std_led_state(int state) {
+  Wire.beginTransmission(0x53);
   Wire.write("STD");
-  Wire.write(state);    //first byte conting from the left
-  Wire.write(state>>8); //second byte conting from the left
+  Wire.write( (byte)(state>>8) ); //second byte counting from the left
+  Wire.write( (byte) state );     //first byte counting from the left
+  Wire.endTransmission();
 }

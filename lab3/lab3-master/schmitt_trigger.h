@@ -14,9 +14,9 @@ class schmitt_trigger {
 
   bool triggered(float reading) {
     if(_triggered)
-      _triggered = _tolerance+reading > _thresh;
+      _triggered = reading + _tolerance >= _thresh;
     else
-      _triggered = _tolerance-reading < _thresh;
+      _triggered = reading - _tolerance >= _thresh;
 
     return _triggered;
   }

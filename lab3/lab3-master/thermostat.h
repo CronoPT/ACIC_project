@@ -4,7 +4,7 @@
 #include "analog_sensor.h"
 #include "schmitt_trigger.h"
 
-#define TEMP_TOLERANCE 2
+#define TEMP_TOLERANCE 1.5
 
 class thermostat {
   analog_sensor _sens;
@@ -17,7 +17,10 @@ class thermostat {
 
   bool triggered() { return _trig.triggered( get_temp() ); }
   
-  float get_temp() { return get_LM35_temp(); }
+  float get_temp() { 
+    Serial.println(get_LM35_temp());
+    return get_LM35_temp();
+  }
 
   float get_LM35_temp() {
     return (_sens.get_read()*(5000/1024))/10;
