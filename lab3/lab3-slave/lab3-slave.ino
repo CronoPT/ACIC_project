@@ -37,6 +37,7 @@ void react_to_sensors(int numBytes) {
   String command = String("");
   for(int i=0; i<3; i++)
     command += (char) Wire.read();
+    
   int res = (int)Wire.read();
   res = (res<<8) + (int)Wire.read();
   

@@ -17,9 +17,10 @@ class thermostat {
 
   bool triggered() { return _trig.triggered( get_temp() ); }
   
-  float get_temp() { 
-    Serial.println(get_LM35_temp());
-    return get_LM35_temp();
+  float get_temp() {
+    float res;
+    Serial.println(res = get_TEMP36_temp());
+    return res;
   }
 
   float get_LM35_temp() {

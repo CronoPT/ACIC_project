@@ -14,7 +14,7 @@
 #define MAX_T 2000 
 #define MIN_T 200
 
-#define TEMP_THRESH 17
+#define TEMP_THRESH 23
 
 analog_sensor* pot    = nullptr;
 analog_sensor* light  = nullptr;
