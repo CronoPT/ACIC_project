@@ -1,3 +1,17 @@
+/*======================================================
+| EXERCISE 5
+======================================================*/
+void set_blinking_led_interval(int interval) {
+  bli_led->set_interval(interval);
+}
+
+void set_pwm_led_brightness(int brightness) {
+  pul_led->set_brightness(brightness);
+}
+
+void set_std_led_state(int state) {
+  state ? std_led->on() : std_led->off();
+}
 #include <Wire.h>
 #include "pwm_led.h"
 #include "blinking_led.h"
@@ -5,12 +19,13 @@
 
 #include "analog_sensor.h"
 
-
 #define PWM_LED_PIN 5
 #define BLI_LED_PIN 3
 #define STD_LED_PIN 2
 
-#define LED_DETECT_PIN 7
+#define LED_DETECT_PIN A2
+
+#define ANALOG_NOISE 50
 
 pwm_led*      pul_led = nullptr;
 blinking_led* bli_led = nullptr;
@@ -61,41 +76,7 @@ void react_to_sensors(int numBytes) {
      }
   else if(command == "STD")
     set_std_led_state(res);
-
-  
-  
 }
-
-char detect_led_state()
-{
-    double voltage = 0;
-    for(int i=0;i<100;i++)
-    {
-      voltage += digitalRead(LED_DETECT_PIN)==HIGH?1:0;
-    }
-    voltage = voltage*5/100;
-    
-      if( pul_led->get_brightness()!=0 and voltage==0 )
-      {
-        Serial.println("broke");
-        return 'b';
-      }
-      else{
-        Serial.println("ok");
-        return 'o';
-       }
-    
-     
-}
-void send_led_state()
-{
-  char state = detect_led_state();
-  Wire.write((byte)state);
-}
-
-
-
-
 
 /*======================================================
 | tasks
@@ -111,3 +92,35 @@ void set_pwm_led_brightness(int brightness) {
 void set_std_led_state(int state) {
   state ? std_led->on() : std_led->off();
 }
+
+/*======================================================
+| begining of changes to EXERCISE 5
+======================================================*/
+char detect_led_state() {
+  double input = 0;
+  
+  for(int i=0; i<100; i++)
+    //reading the analog values, they seemed noisy, so we could not compare
+    //them with zero, because we never read a zero
+    input += analogRead(LED_DETECT_PIN)>ANALOG_NOISE ? 1 : 0;
+    
+  input = input*5/100;
+  
+  if( pul_led->get_brightness()!=0 && input==0 ) {
+    Serial.println("broke");
+    return 'b';
+  }
+  else {
+    Serial.println("ok");
+    return 'o';
+  }     
+}
+
+//just sends a byte indicating if the led is OK or BROKE
+void send_led_state() {
+  char state = detect_led_state();
+  Wire.write((byte)state);
+}
+/*======================================================
+| ending of changes to EXERCISE 5
+======================================================*/

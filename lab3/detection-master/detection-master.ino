@@ -1,3 +1,17 @@
+/*======================================================
+| EXERCISE 5
+======================================================*/
+void set_blinking_led_interval(int interval) {
+  bli_led->set_interval(interval);
+}
+
+void set_pwm_led_brightness(int brightness) {
+  pul_led->set_brightness(brightness);
+}
+
+void set_std_led_state(int state) {
+  state ? std_led->on() : std_led->off();
+}
 #include <Wire.h>
 #include "analog_sensor.h"
 #include "thermostat.h"
@@ -40,16 +54,21 @@ void setup() {
 }
 
 /*======================================================
-| loop
+| begining of changes to EXERCISE 5
 ======================================================*/
 void loop() {
   set_blinking_led_interval( get_blinking_led_interval() );
-  set_pwm_led_brightness(    get_pwm_led_brightness()    );
+  set_pwm_led_brightness( get_pwm_led_brightness() );
+  //request the state
   Wire.requestFrom(0x53,1);
   char state = (char)Wire.read();
-  digitalWrite(LED_BUILTIN,state=='o'?HIGH:LOW);
-  set_std_led_state(         get_std_led_state()         );
+  //evaluate the received state
+  digitalWrite(LED_BUILTIN,state=='o'?LOW:HIGH);
+  set_std_led_state( get_std_led_state() );
 }
+/*======================================================
+| ending of changes to EXERCISE 5
+======================================================*/
 
 /*======================================================
 | tasks
