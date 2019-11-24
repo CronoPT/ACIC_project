@@ -5,12 +5,16 @@
 #define MODE_1 1
 #define MODE_2 2
 
+intersept* interseption = nullptr;
+
 void setup() {
   /*
    | Read interseption info
    | Initialize interseption
   */
-  intersept interseption = new intersept(x, y, s, w, s_but_pin, w_but_pin, MODE_0)
+  Serial.begin(9600);
+  
+  interseption = new intersept(0, 0, 1, 1, MODE_0);
 }
 
 void loop() { interseption->operate(); }

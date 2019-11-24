@@ -3,16 +3,16 @@
 
 #include "led.h"
 
-class traffic_ligher {
+class traffic_light {
   led* _red_led;
   led* _yel_led;
   led* _gre_led;
 
   public:
-  traffic_light(int red_pin, int yel_pin, int gre_pin);
+  traffic_light(int red_pin, int yel_pin, int gre_pin):
     _red_led(red_pin),
-    _yel_pin(yel_pin),
-    _gre_pin(gre_pin) { /* Do Nothing */ }
+    _yel_led(yel_pin),
+    _gre_led(gre_pin) { /* Do Nothing */ Serial.println("Building traffic light"); }
 
   void red_on() const {
     _red_led->on();

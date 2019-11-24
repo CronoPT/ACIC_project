@@ -6,10 +6,10 @@
 class mode_1: public intersept_mode {
 
   public:
-  mode_1(intersep* interseption):
-    _intersept_mode(interseption) { /*Do Nothing*/ }
+  mode_1(intersept* interseption):
+    intersept_mode(interseption) { /*Do Nothing*/ }
     
-  override void operate() {
+  void operate() override {
     //FIXME: implement
   }
   

@@ -3,9 +3,9 @@
 
 #include "debounced_button.h"
 
-class counter() {
+class counter {
   int _count;
-  debounced_button* button;
+  debounced_button* _button;
 
   public:
   counter(int button_pin):
