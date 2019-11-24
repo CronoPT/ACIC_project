@@ -1,9 +1,17 @@
-#include "mode_1.h"
+#include "mode_2.h"
 #include "intersept.h"
+#include "message.h"
+#include "i2c_post_office.h"
 
-void mode_1::operate() {
+void mode_2::operate() {
   get_intersept()->get_s_counter()->check_inc();
   get_intersept()->get_w_counter()->check_inc();
+  /*message* msg = i2c_post_office::get_instance().get_latest();
+  if(msg != nullptr) {
+    msg->print();
+    delete msg;
+  }*/
+
   if(get_yellow()){
     if(get_yellow_interval()->passed()) {
       set_s_green(!get_s_green());
@@ -18,6 +26,7 @@ void mode_1::operate() {
         get_intersept()->get_light_s()->red_on();
         get_intersept()->get_light_w()->gre_on();
       }
+      build_send_message();
     }
   }
   else {
@@ -31,7 +40,7 @@ void mode_1::operate() {
   }
 }
 
-int mode_1::compute_right_time() {
+int mode_2::compute_right_time() {
   float res = 0.0;
 
   if(get_s_green()) {
@@ -51,4 +60,23 @@ int mode_1::compute_right_time() {
   res = res < 0.25 ? 0.25 : res;
 
   return res*PERIOD*UNIT;
+}
+
+void mode_2::build_send_message() {
+  byte destination = 6;
+  byte source = 7;
+  byte event = 0;
+  if(get_s_green())
+    event = get_intersept()->get_s() ? 1 : 0;
+  else 
+    event = get_intersept()->get_w() ? 3 : 2;
+  byte cars_N = get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
+  byte cars_S = get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
+  byte cars_E = get_intersept()->get_w() ? get_intersept()->get_w_counter()->get_count() : 0;
+  byte cars_W = get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();
+  message* to_send = new message(destination, source, event, cars_N, cars_S, cars_E, cars_W);
+  Serial.println("Here, bro");
+  i2c_post_office::get_instance().send_message(to_send);
+  Serial.println("Up top, bro");
+  delete to_send;
 }

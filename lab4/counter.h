@@ -20,6 +20,10 @@ class counter {
     return count;
   }
 
+    int get_count() { 
+      return _count;
+    }
+
   void check_inc() {
     if(_button->pressed()) {
       _count += 1;
