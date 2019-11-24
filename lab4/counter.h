@@ -9,12 +9,23 @@ class counter {
 
   public:
   counter(int button_pin):
-    _button(button_pin) { /*Don Nothing*/ }
+    _count(0),
+    _button(button_pin) { 
+      _button = new debounced_button(button_pin);
+    }
 
   int get_count_reset() { 
     int count = _count;
     _count = 0;
     return count;
+  }
+
+  void check_inc() {
+    if(_button->pressed()) {
+      _count += 1;
+      Serial.print("Counts -> ");
+      Serial.println(_count);
+    }
   }
   
 };

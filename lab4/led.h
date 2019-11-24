@@ -7,8 +7,7 @@ class led {
   public:
   led(int pin):_pin(pin) {
     pinMode(_pin, OUTPUT); 
-    digitalWrite(_pin, HIGH);
-    Serial.println("================"); 
+    digitalWrite(_pin, LOW);
   }
 
   led(){ /*Do nothing*/ }

@@ -14,7 +14,9 @@ class interval {
     _interval(interval), 
     _curr_millis(0), 
     _prev_millis(0),
-    _time_gap(0) { /*Do nothing*/ }
+    _time_gap(0) { /*Do nothing*/
+    _prev_millis = millis();    
+  }
 
   void set_interval(int interval) {
     _interval = interval;

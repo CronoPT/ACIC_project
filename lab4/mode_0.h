@@ -7,9 +7,9 @@ class mode_0: public intersept_mode {
   
   public:
   mode_0(intersept* interseption):
-    intersept_mode(interseption) { /*Do Nothing*/ Serial.println("Building intersept mode 0");}
+    intersept_mode(interseption) { /*Do Nothing*/ }
     
-  void operate() override;
+  void operate() override ;
   
 };
 

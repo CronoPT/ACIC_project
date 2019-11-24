@@ -12,7 +12,11 @@ class traffic_light {
   traffic_light(int red_pin, int yel_pin, int gre_pin):
     _red_led(red_pin),
     _yel_led(yel_pin),
-    _gre_led(gre_pin) { /* Do Nothing */ Serial.println("Building traffic light"); }
+    _gre_led(gre_pin) {
+    _red_led = new led(red_pin);
+    _yel_led = new led(yel_pin);
+    _gre_led = new led(gre_pin);     
+  }
 
   void red_on() const {
     _red_led->on();

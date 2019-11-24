@@ -9,9 +9,7 @@ class mode_2: public intersept_mode {
   mode_2(intersept* interseption):
     intersept_mode(interseption) { /*Do Nothing*/ }
     
-  void operate() override {
-    //FIXME: implement
-  }
+  void operate() override ;
   
 };
 

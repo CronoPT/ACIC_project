@@ -19,7 +19,7 @@ class intersept_mode {
     _main_interval(nullptr),
     _yellow_interval(nullptr),
     _s_green(true),
-    _yellow(false) { /*Do Nothing*/ Serial.println("Building intersept_mode");}
+    _yellow(false) { /*Do Nothing*/ }
   
   public:
   virtual void operate() = 0;
