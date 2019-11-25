@@ -9,12 +9,14 @@
 #include "mode_0.h"
 #include "mode_1.h"
 #include "mode_2.h"
+#include "i2c_post_office.h"
 
 class intersept {
   int _x;
   int _y;
   bool _s;
   bool _w;
+  byte _address;
   int _s_green_t; 
   int _w_green_t;
   intersept_mode* _mode;
@@ -24,23 +26,22 @@ class intersept {
   counter* _w_counter;
   
   public:
-  intersept(int x, int y, bool s, bool w, int mode):
-    _x(x), _y(y), _s(s), _w(w),
+  intersept(int mode):
     _s_green_t(INIT_GREEN*UNIT),
     _w_green_t(PERIOD-INIT_GREEN),
     _mode(nullptr),
-    _light_s(S_RED, S_YEL, S_GRE),
-    _light_w(W_RED, W_YEL, W_GRE),
-    _s_counter(S_BUTTON),
-    _w_counter(W_BUTTON) { 
-
-    _light_s = new traffic_light(S_RED, S_YEL, S_GRE);
-    _light_w = new traffic_light(W_RED, W_YEL, W_GRE);
-
-    _s_counter = new counter(S_BUTTON);
-    _w_counter = new counter(W_BUTTON);
+    _light_s(new traffic_light(S_RED, S_YEL, S_GRE)),
+    _light_w(new traffic_light(W_RED, W_YEL, W_GRE),
+    _s_counter(new counter(S_BUTTON)),
+    _w_counter(new counter(W_BUTTON)) { 
     
-    /* probabily had initial mode for boot sequence */
+    init_coordinate();
+    _x = init_x();
+    _y = init_y();
+    _s = init_s();
+    _w = init_w();
+    _address = (byte) ((_x<<4) + _y);
+
     if(mode==0)
       _mode = new mode_0(this);
     else if(mode==1)
@@ -55,6 +56,7 @@ class intersept {
   int get_y() const { return _y; }
   bool get_s() const { return _s; }
   bool get_w() const { return _w; }
+  byte get_address() const { return _address; }
   int get_s_green_t() const { return _s_green_t; }
   int get_w_green_t() const { return _w_green_t; }
   traffic_light* get_light_s() const { return _light_s; }

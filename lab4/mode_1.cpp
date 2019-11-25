@@ -1,6 +1,10 @@
 #include "mode_1.h"
 #include "intersept.h"
 
+mode_1::mode_1(intersept* interseption):
+  intersept_mode(interseption),
+  _duty_cycle(0.5) { /*Do Nothing*/ }
+
 void mode_1::operate() {
   get_intersept()->get_s_counter()->check_inc();
   get_intersept()->get_w_counter()->check_inc();

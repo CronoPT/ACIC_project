@@ -7,13 +7,9 @@ class mode_1: public intersept_mode {
   float _duty_cycle;
 
   public:
-  mode_1(intersept* interseption):
-    intersept_mode(interseption),
-    _duty_cycle(0.5) { /*Do Nothing*/ }
-    
+  mode_1(intersept* interseption);
   void operate() override ;
   int compute_right_time();
-  
 };
 
 #endif

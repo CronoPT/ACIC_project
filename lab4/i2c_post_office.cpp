@@ -5,15 +5,13 @@ void on_receive(int num_bytes) {
   i2c_post_office::get_instance().add_message( i2c_post_office::get_instance().receive_message() );
 }
 
-void i2c_post_office::init_post_office() {
-    Wire.begin(0x42);
+void i2c_post_office::init_post_office(byte address) {
+    Wire.begin(address);
     Wire.onReceive(on_receive);
-    for(int i=0; i<_max_index; i++)
-      _msgs[i] = nullptr;
 }
 
 void i2c_post_office::send_message(message* msg) {
-  Wire.beginTransmission(0x53);
+  Wire.beginTransmission(0x00);
   Wire.write((byte) msg->get_destination());
   Wire.write((byte) msg->get_source());
   Wire.write((byte) msg->get_event());
@@ -47,11 +45,9 @@ message* i2c_post_office::receive_message() {
 }
 
 void i2c_post_office::add_message(message* msg) {
-  _msgs[_index] = msg;
+  _queue.push_back(msg);
 }
 
 message* i2c_post_office::get_latest() {
-  message* res = _msgs[_index];
-  _index = _index+1 % _max_index;
-  return res;
+  return _queue.pop();
 }

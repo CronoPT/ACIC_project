@@ -13,7 +13,6 @@ void setup() {
    | Initialize interseption
   */
   Serial.begin(9600);
-  
   interseption = new intersept(0, 0, 1, 1, MODE_2);
 }
 

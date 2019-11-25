@@ -1,16 +1,23 @@
 #include "mode_2.h"
 #include "intersept.h"
-#include "message.h"
-#include "i2c_post_office.h"
+
+mode_2::mode_2(intersept* interseption):
+  intersept_mode(interseption),
+  _duty_cycle(0.5) { 
+  i2c_post_office::get_instance().init_post_office(
+    get_intersept()->get_address()
+  );
+}
 
 void mode_2::operate() {
   get_intersept()->get_s_counter()->check_inc();
   get_intersept()->get_w_counter()->check_inc();
-  /*message* msg = i2c_post_office::get_instance().get_latest();
+  message* msg = i2c_post_office::get_instance().get_latest();
   if(msg != nullptr) {
     msg->print();
     delete msg;
-  }*/
+    Serial.print("Stuff all the time, though");
+  }
 
   if(get_yellow()){
     if(get_yellow_interval()->passed()) {
@@ -64,7 +71,7 @@ int mode_2::compute_right_time() {
 
 void mode_2::build_send_message() {
   byte destination = 6;
-  byte source = 7;
+  byte source = get_intersept()->get_address();
   byte event = 0;
   if(get_s_green())
     event = get_intersept()->get_s() ? 1 : 0;

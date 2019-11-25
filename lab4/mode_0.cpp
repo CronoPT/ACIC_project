@@ -1,6 +1,9 @@
 #include "mode_0.h"
 #include "intersept.h"
 
+mode_0::mode_0(intersept*): 
+  intersept_mode(interseption) { /*Do Nothing*/ }
+
 void mode_0::operate() {
   if(get_yellow()){
     if(get_yellow_interval()->passed()) {
