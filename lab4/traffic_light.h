@@ -10,12 +10,10 @@ class traffic_light {
 
   public:
   traffic_light(int red_pin, int yel_pin, int gre_pin):
-    _red_led(red_pin),
-    _yel_led(yel_pin),
-    _gre_led(gre_pin) {
-    _red_led = new led(red_pin);
-    _yel_led = new led(yel_pin);
-    _gre_led = new led(gre_pin);     
+    _red_led(_red_led = new led(red_pin)),
+    _yel_led(_yel_led = new led(yel_pin)),
+    _gre_led(_gre_led = new led(gre_pin)) {
+    /*Do Nothing*/
   }
 
   void red_on() const {

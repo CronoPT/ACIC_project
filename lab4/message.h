@@ -66,7 +66,7 @@ class message {
   byte get_cars_E() const { return _cars_E; }
   byte get_cars_W() const { return _cars_W; }
   unsigned long get_time_stamp() const { return _time_stamp; }
-  void set_time_stamp(unsigned long time_stamp) { _time_stamp = _time_stamp; }
+  void set_time_stamp(unsigned long time_stamp) { _time_stamp = time_stamp; }
 
 };
 

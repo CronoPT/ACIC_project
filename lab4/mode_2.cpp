@@ -4,7 +4,7 @@
 mode_2::mode_2(intersept* interseption):
   intersept_mode(interseption),
   _duty_cycle(0.5) { 
-  i2c_post_office::get_instance().init_post_office(get_intersept()->get_address());
+  i2c_post_office::get_instance().init_post_office(interseption->get_address());
 }
 
 void mode_2::operate() {
@@ -73,9 +73,9 @@ void mode_2::build_send_message() {
     byte destination = get_intersept()->get_neigh_addrs()[i];
     byte event = 0;
     if(get_s_green())
-      event = get_intersept()->get_s() ? 1 : 0;
+      event = (byte) get_intersept()->get_s() ? 1 : 0;
     else 
-      event = get_intersept()->get_w() ? 3 : 2;
+      event = (byte) get_intersept()->get_w() ? 3 : 2;
     byte cars_N = (byte) get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
     byte cars_S = (byte) get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
     byte cars_E = (byte) get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();

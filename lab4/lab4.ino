@@ -35,8 +35,6 @@ void setup() {
   j = q.pop();
   Serial.println(j==msg_5 ? "Passed" : "Not passed");
   Serial.println(q.empty() ? "Passed" : "Not passed");*/
-
-
   
   interseption = new intersept(MODE_2);
 }

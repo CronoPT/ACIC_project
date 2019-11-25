@@ -30,7 +30,6 @@ class intersept {
   intersept(int mode):
     _s_green_t(INIT_GREEN*UNIT),
     _w_green_t(PERIOD-INIT_GREEN),
-    _mode(nullptr),
     _light_s(new traffic_light(S_RED, S_YEL, S_GRE)),
     _light_w(new traffic_light(W_RED, W_YEL, W_GRE)),
     _s_counter(new counter(S_BUTTON)),
@@ -49,6 +48,7 @@ class intersept {
     Serial.println(_w ? "West" : "East");
     Serial.println(_address);
 
+    
     _neigh_addrs[0] = (byte) (((_x-1)<<4) + _y);
     _neigh_addrs[1] = (byte) (((_x+1)<<4) + _y);
     _neigh_addrs[2] = (byte) ((_x<<4) + (_y-1));
@@ -100,8 +100,8 @@ class intersept {
 
   int init_y() {
     int y = (int) (digitalRead(10)==HIGH ? 1 : 0);
-    y = (y*2) + (int)(digitalRead(11)==HIGH ? 1 : 0);
-    y = (y*2) + (int)(digitalRead(12)==HIGH ? 1 : 0);
+    y = (y*2) + (int) (digitalRead(11)==HIGH ? 1 : 0);
+    y = (y*2) + (int) (digitalRead(12)==HIGH ? 1 : 0);
     return y;
   }
 

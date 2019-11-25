@@ -10,9 +10,7 @@ class counter {
   public:
   counter(int button_pin):
     _count(0),
-    _button(button_pin) { 
-      _button = new debounced_button(button_pin);
-    }
+    _button(new debounced_button(button_pin)) { /*Do Nothing*/ }
 
   int get_count_reset() { 
     int count = _count;
@@ -20,9 +18,9 @@ class counter {
     return count;
   }
 
-    int get_count() { 
-      return _count;
-    }
+  int get_count() { 
+    return _count;
+  }
 
   void check_inc() {
     if(_button->pressed()) {
