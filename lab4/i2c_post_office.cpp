@@ -53,3 +53,7 @@ void i2c_post_office::add_message(message* msg) {
 message* i2c_post_office::get_latest() {
   return _queue.pop();
 }
+
+bool i2c_post_office::has_messages() {
+  return !_queue.empty();
+}

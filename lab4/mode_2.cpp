@@ -10,8 +10,8 @@ mode_2::mode_2(intersept* interseption):
 void mode_2::operate() {
   get_intersept()->get_s_counter()->check_inc();
   get_intersept()->get_w_counter()->check_inc();
-  message* msg = i2c_post_office::get_instance().get_latest();
-  if(msg != nullptr) {
+  if(i2c_post_office::get_instance().has_messages()) {
+    message* msg = i2c_post_office::get_instance().get_latest();
     msg->print();
     delete msg;
     Serial.println("Stuff all the time, though");

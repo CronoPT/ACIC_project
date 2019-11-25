@@ -21,6 +21,7 @@ class i2c_post_office {
   message* receive_message();
   message* get_latest();
   void add_message(message* msg);
+  bool has_messages();
 
 };
 
