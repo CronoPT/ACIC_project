@@ -4,9 +4,7 @@
 mode_2::mode_2(intersept* interseption):
   intersept_mode(interseption),
   _duty_cycle(0.5) { 
-  i2c_post_office::get_instance().init_post_office(
-    get_intersept()->get_address()
-  );
+  i2c_post_office::get_instance().init_post_office(get_intersept()->get_address());
 }
 
 void mode_2::operate() {
@@ -70,20 +68,22 @@ int mode_2::compute_right_time() {
 }
 
 void mode_2::build_send_message() {
-  byte destination = 6;
-  byte source = get_intersept()->get_address();
-  byte event = 0;
-  if(get_s_green())
-    event = get_intersept()->get_s() ? 1 : 0;
-  else 
-    event = get_intersept()->get_w() ? 3 : 2;
-  byte cars_N = get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
-  byte cars_S = get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
-  byte cars_E = get_intersept()->get_w() ? get_intersept()->get_w_counter()->get_count() : 0;
-  byte cars_W = get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();
-  message* to_send = new message(destination, source, event, cars_N, cars_S, cars_E, cars_W);
-  Serial.println("Here, bro");
-  i2c_post_office::get_instance().send_message(to_send);
-  Serial.println("Up top, bro");
-  delete to_send;
+  for(int i=0; i<4; i++){
+    byte source = get_intersept()->get_address();
+    byte destination = get_intersept()->get_neigh_addrs()[i];
+    byte event = 0;
+    if(get_s_green())
+      event = get_intersept()->get_s() ? 1 : 0;
+    else 
+      event = get_intersept()->get_w() ? 3 : 2;
+    byte cars_N = get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
+    byte cars_S = get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
+    byte cars_E = get_intersept()->get_w() ? get_intersept()->get_w_counter()->get_count() : 0;
+    byte cars_W = get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();
+    message* to_send = new message(destination, source, event, cars_N, cars_S, cars_E, cars_W);
+    Serial.println("Here, bro");
+    i2c_post_office::get_instance().send_message(to_send);
+    Serial.println("Up top, bro");
+    delete to_send;
+  }
 }

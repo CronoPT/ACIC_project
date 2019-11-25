@@ -17,6 +17,7 @@ class intersept {
   bool _s;
   bool _w;
   byte _address;
+  byte _neigh_addrs[4];
   int _s_green_t; 
   int _w_green_t;
   intersept_mode* _mode;
@@ -31,7 +32,7 @@ class intersept {
     _w_green_t(PERIOD-INIT_GREEN),
     _mode(nullptr),
     _light_s(new traffic_light(S_RED, S_YEL, S_GRE)),
-    _light_w(new traffic_light(W_RED, W_YEL, W_GRE),
+    _light_w(new traffic_light(W_RED, W_YEL, W_GRE)),
     _s_counter(new counter(S_BUTTON)),
     _w_counter(new counter(W_BUTTON)) { 
     
@@ -42,6 +43,20 @@ class intersept {
     _w = init_w();
     _address = (byte) ((_x<<4) + _y);
 
+    Serial.println(_x);
+    Serial.println(_y);
+    Serial.println(_s ? "South" : "North");
+    Serial.println(_w ? "West" : "East");
+    Serial.println(_address);
+
+    _neigh_addrs[0] = (byte) (((_x-1)<<4) + _y);
+    _neigh_addrs[1] = (byte) (((_x+1)<<4) + _y);
+    _neigh_addrs[2] = (byte) ((_x<<4) + (_y-1));
+    _neigh_addrs[3] = (byte) ((_x<<4) + (_y+1));
+
+    for(int i=0; i<4; i++)
+      Serial.println(_neigh_addrs[i]);
+    
     if(mode==0)
       _mode = new mode_0(this);
     else if(mode==1)
@@ -57,12 +72,42 @@ class intersept {
   bool get_s() const { return _s; }
   bool get_w() const { return _w; }
   byte get_address() const { return _address; }
+  byte* get_neigh_addrs() const { return _neigh_addrs; }
   int get_s_green_t() const { return _s_green_t; }
   int get_w_green_t() const { return _w_green_t; }
   traffic_light* get_light_s() const { return _light_s; }
   traffic_light* get_light_w() const { return _light_w; }
   counter* get_s_counter() const { return _s_counter; }
-  counter* get_w_counter() const { return _w_counter; }  
+  counter* get_w_counter() const { return _w_counter; }
+
+  void init_coordinate() {
+    pinMode(12, INPUT);
+    pinMode(11, INPUT);
+    pinMode(10, INPUT);
+    pinMode(A0, INPUT);
+    pinMode(A1, INPUT);
+    pinMode(A2, INPUT);
+    pinMode(DS, INPUT);
+    pinMode(DW, INPUT);
+  }
+
+  int init_x() {
+    int x = (int) (analogRead(A2) > 100 ? 1 : 0);
+    x = (x*2) + (int) (analogRead(A1) > 100 ? 1 : 0);
+    x = (x*2) + (int) (analogRead(A0) > 100 ? 1 : 0);
+    return x;
+  }
+
+  int init_y() {
+    int y = (int) (digitalRead(10)==HIGH ? 1 : 0);
+    y = (y*2) + (int)(digitalRead(11)==HIGH ? 1 : 0);
+    y = (y*2) + (int)(digitalRead(12)==HIGH ? 1 : 0);
+    return y;
+  }
+
+  bool init_s() { return digitalRead(DS)==HIGH; }
+
+  bool init_w() { return digitalRead(DW)>100; }
   
 };
 

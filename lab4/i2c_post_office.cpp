@@ -11,7 +11,7 @@ void i2c_post_office::init_post_office(byte address) {
 }
 
 void i2c_post_office::send_message(message* msg) {
-  Wire.beginTransmission(0x00);
+  Wire.beginTransmission(msg->get_destination());
   Wire.write((byte) msg->get_destination());
   Wire.write((byte) msg->get_source());
   Wire.write((byte) msg->get_event());
@@ -24,7 +24,9 @@ void i2c_post_office::send_message(message* msg) {
   Wire.write((byte)(stamp>>16));
   Wire.write((byte)(stamp>>8));
   Wire.write((byte) stamp);
+  Serial.println("Ending transmission");
   Wire.endTransmission();
+  Serial.println("Endededed transmission");
 }
 
 message* i2c_post_office::receive_message() {

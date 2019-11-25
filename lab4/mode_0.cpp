@@ -1,7 +1,7 @@
 #include "mode_0.h"
 #include "intersept.h"
 
-mode_0::mode_0(intersept*): 
+mode_0::mode_0(intersept* interseption): 
   intersept_mode(interseption) { /*Do Nothing*/ }
 
 void mode_0::operate() {
