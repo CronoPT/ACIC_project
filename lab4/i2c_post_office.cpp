@@ -2,7 +2,20 @@
 #include "message.h"
 
 void on_receive(int num_bytes) {
-  i2c_post_office::get_instance().add_message( i2c_post_office::get_instance().receive_message() );
+  byte destination = (byte) Wire.read();
+  byte source = (byte) Wire.read(); 
+  byte event  = (byte) Wire.read();
+  byte cars_N = (byte) Wire.read();
+  byte cars_S = (byte) Wire.read();
+  byte cars_E = (byte) Wire.read();
+  byte cars_W = (byte) Wire.read();
+  unsigned long time_stamp = (long) Wire.read();
+  time_stamp = (time_stamp<<8) + Wire.read(); 
+  time_stamp = (time_stamp<<8) + Wire.read(); 
+  time_stamp = (time_stamp<<8) + Wire.read(); 
+  message* res = new message(destination, source, event, cars_N, cars_S, cars_E,
+                              cars_W, time_stamp);
+  i2c_post_office::get_instance().add_message(res);
 }
 
 void i2c_post_office::init_post_office(byte address) {
@@ -30,20 +43,7 @@ void i2c_post_office::send_message(message* msg) {
 }
 
 message* i2c_post_office::receive_message() {
-    byte destination = (byte) Wire.read();
-    byte source = (byte) Wire.read(); 
-    byte event  = (byte) Wire.read();
-    byte cars_N = (byte) Wire.read();
-    byte cars_S = (byte) Wire.read();
-    byte cars_E = (byte) Wire.read();
-    byte cars_W = (byte) Wire.read();
-    unsigned long time_stamp = (long) Wire.read();
-    time_stamp = (time_stamp<<8) + Wire.read(); 
-    time_stamp = (time_stamp<<8) + Wire.read(); 
-    time_stamp = (time_stamp<<8) + Wire.read(); 
-    message* res = new message(destination, source, event, cars_N, cars_S, cars_E,
-                               cars_W, time_stamp);
-    return res;
+  /*Empty, for now*/
 }
 
 void i2c_post_office::add_message(message* msg) {

@@ -14,7 +14,7 @@ void mode_2::operate() {
   if(msg != nullptr) {
     msg->print();
     delete msg;
-    Serial.print("Stuff all the time, though");
+    Serial.println("Stuff all the time, though");
   }
 
   if(get_yellow()){
@@ -76,14 +76,13 @@ void mode_2::build_send_message() {
       event = get_intersept()->get_s() ? 1 : 0;
     else 
       event = get_intersept()->get_w() ? 3 : 2;
-    byte cars_N = get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
-    byte cars_S = get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
-    byte cars_E = get_intersept()->get_w() ? get_intersept()->get_w_counter()->get_count() : 0;
-    byte cars_W = get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();
-    message* to_send = new message(destination, source, event, cars_N, cars_S, cars_E, cars_W);
+    byte cars_N = (byte) get_intersept()->get_s() ? 0 : get_intersept()->get_s_counter()->get_count();
+    byte cars_S = (byte) get_intersept()->get_s() ? get_intersept()->get_s_counter()->get_count() : 0;
+    byte cars_E = (byte) get_intersept()->get_w() ? 0 : get_intersept()->get_w_counter()->get_count();
+    byte cars_W = (byte) get_intersept()->get_w() ? get_intersept()->get_w_counter()->get_count() : 0;
+    message to_send(destination, source, event, cars_N, cars_S, cars_E, cars_W);
     Serial.println("Here, bro");
-    i2c_post_office::get_instance().send_message(to_send);
+    i2c_post_office::get_instance().send_message(&to_send);
     Serial.println("Up top, bro");
-    delete to_send;
   }
 }
