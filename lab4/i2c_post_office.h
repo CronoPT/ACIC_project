@@ -16,6 +16,9 @@ class i2c_post_office {
       return instance;
   }
 
+  i2c_post_office(i2c_post_office const&);
+  void operator=(i2c_post_office const&);
+
   void init_post_office(byte address);
   void send_message(message* msg);
   message* receive_message();
