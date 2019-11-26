@@ -3,8 +3,8 @@
 
 #include "intersept_mode.h"
 
-class mode_malfunction: public intersetp_mode {
-  intersept_node* _prev;
+class mode_malfunction: public intersept_mode {
+  intersept_mode* _prev;
   bool _broke_s;
 
   public:

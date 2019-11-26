@@ -8,7 +8,7 @@ mode_malfunction::mode_malfunction(intersept* interseption,
   _broke_s(broke_s) { /*Do Nothing*/ }
 
 void mode_malfunction::operate() {
-  if(get_yellow_interval()->passed(){
+  if(get_yellow_interval()->passed()){
     if(get_yellow()){
       get_intersept()->get_light_s()->all_off();
       get_intersept()->get_light_w()->all_off();
@@ -31,7 +31,7 @@ void mode_malfunction::operate() {
     else {
       get_intersept()->get_light_w()->red_on();
       if(!get_intersept()->get_light_w()->red_broke()){
-        get_intersept()->set_mode(_prev)
+        get_intersept()->set_mode(_prev);
         delete this;
       }
     }

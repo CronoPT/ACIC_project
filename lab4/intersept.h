@@ -30,8 +30,8 @@ class intersept {
   intersept(int mode):
     _s_green_t(INIT_GREEN*UNIT),
     _w_green_t(PERIOD-INIT_GREEN),
-    _light_s(new traffic_light(S_RED, S_YEL, S_GRE)),
-    _light_w(new traffic_light(W_RED, W_YEL, W_GRE)),
+    _light_s(new traffic_light(S_RED, S_YEL, S_GRE,1)),
+    _light_w(new traffic_light(W_RED, W_YEL, W_GRE,0)),
     _s_counter(new counter(S_BUTTON)),
     _w_counter(new counter(W_BUTTON)) { 
     
