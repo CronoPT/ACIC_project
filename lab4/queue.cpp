@@ -11,8 +11,8 @@ message* queue::pop() {
   node* curr_node = _head;
   _head = curr_node->get_next();
   message* msg = curr_node->get_msg();
-  if(_back==curr_node) 
-    _back == nullptr;
+  if(_back==curr_node)
+    _back = nullptr;
   delete curr_node;
   return msg;
 }
