@@ -13,27 +13,17 @@ class traffic_light {
 
   public:
   traffic_light(int red_pin, int yel_pin, int gre_pin, int detection_pin):
-    _detection_pin(detection_pin),
-    
     _red_led(_red_led = new led(red_pin)),
     _yel_led(_yel_led = new led(yel_pin)),
-    _gre_led(_gre_led = new led(gre_pin)) {
-    /*Do Nothing*/
+    _gre_led(_gre_led = new led(gre_pin)),
+    _detection_pin(detection_pin) {
+    pinMode(detection_pin, INPUT);
   }
 
-  bool red_broke()
-  {
-    int input = 0;
-    if(_detection_pin == 1)
-    //for(int i = 0; i<10; i++)
-      input += analogRead(A4)>100 ? 1 : 0; 
-    else
-    //for(int i = 0; i<10; i++)
-      input += analogRead(A5)>100 ? 1 : 0;
-    if(input>0)
-    return true;
-    else false;
+  bool red_broke() {
+    return analogRead(_detection_pin) > 100;
   }
+
   void red_on() const {
     _red_led->on();
     _yel_led->off();

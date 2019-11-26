@@ -1,5 +1,6 @@
 #include "mode_2.h"
 #include "intersept.h"
+#include "mode_malfunction.h"
 
 mode_2::mode_2(intersept* interseption):
   intersept_mode(interseption),
@@ -42,6 +43,18 @@ void mode_2::operate() {
       set_yellow_interval(new interval(UNIT));
       delete get_main_interval(); 
     }
+
+    /*Detection of broken led*/
+    if(get_s_green())
+      if(get_intersept()->get_light_w()->red_broke())
+        get_intersept()->set_mode(
+          new mode_malfunction(get_intersept(), this, false)
+        );
+    else
+      if(get_intersept()->get_light_s()->red_broke())
+        get_intersept()->set_mode(
+          new mode_malfunction(get_intersept(), this, true)
+        );
   }
 }
 

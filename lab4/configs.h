@@ -15,9 +15,16 @@
 #define W_GRE 5
 #define W_BUTTON 8
 
-#define B0 12
-#define B1 11
-#define B2 10
+#define b0 12
+#define b1 11
+#define b2 10
+
+#define a0 A0
+#define a1 A1
+#define a2 A2
+
+#define DETECT_PIN_S A4
+#define DETECT_PIN_W A5
 
 #define DS 13
 #define DW A3

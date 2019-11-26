@@ -30,8 +30,8 @@ class intersept {
   intersept(int mode):
     _s_green_t(INIT_GREEN*UNIT),
     _w_green_t(PERIOD-INIT_GREEN),
-    _light_s(new traffic_light(S_RED, S_YEL, S_GRE,1)),
-    _light_w(new traffic_light(W_RED, W_YEL, W_GRE,0)),
+    _light_s(new traffic_light(S_RED, S_YEL, S_GRE, DETECT_PIN_S)),
+    _light_w(new traffic_light(W_RED, W_YEL, W_GRE, DETECT_PIN_W)),
     _s_counter(new counter(S_BUTTON)),
     _w_counter(new counter(W_BUTTON)) { 
     
@@ -80,13 +80,15 @@ class intersept {
   counter* get_s_counter() const { return _s_counter; }
   counter* get_w_counter() const { return _w_counter; }
 
+  void set_mode(intersept_mode* new_mode) { _mode = new_mode;}
+
   void init_coordinate() {
-    pinMode(12, INPUT);
-    pinMode(11, INPUT);
-    pinMode(10, INPUT);
-    pinMode(A0, INPUT);
-    pinMode(A1, INPUT);
-    pinMode(A2, INPUT);
+    pinMode(b0, INPUT);
+    pinMode(b1, INPUT);
+    pinMode(b2, INPUT);
+    pinMode(a0, INPUT);
+    pinMode(a1, INPUT);
+    pinMode(a2, INPUT);
     pinMode(DS, INPUT);
     pinMode(DW, INPUT);
   }
