@@ -20,13 +20,16 @@ void mode_malfunction::operate() {
     set_yellow(!get_yellow());
     delete get_yellow_interval();
     set_yellow_interval(new interval(UNIT));
+  }
 
+  if(!get_yellow()) {
     if(_broke_s) {
       get_intersept()->get_light_s()->red_on();
       if(!get_intersept()->get_light_s()->red_broke()) {
         get_intersept()->set_mode(_prev);
         delete this;
       }
+      get_intersept()->get_light_s()->all_off();
     }
     else {
       get_intersept()->get_light_w()->red_on();
@@ -34,6 +37,7 @@ void mode_malfunction::operate() {
         get_intersept()->set_mode(_prev);
         delete this;
       }
+      get_intersept()->get_light_w()->all_off();
     }
   }
 }
