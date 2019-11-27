@@ -58,16 +58,18 @@ void mode_1::operate() {
     | is broke, then we change the functioning
     | mode off the interception
     */
-    if(get_s_green())
+    if(get_s_green()) {
       if(get_intersept()->get_light_w()->red_broke())
         get_intersept()->set_mode(
           new mode_malfunction(get_intersept(), this, false)
         );
-    else
+    }
+    else {
       if(get_intersept()->get_light_s()->red_broke())
         get_intersept()->set_mode(
           new mode_malfunction(get_intersept(), this, true)
         );
+    }
   }
 }
 
