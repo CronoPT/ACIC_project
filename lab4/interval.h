@@ -25,6 +25,14 @@ class interval {
   void inc_interval(int to_inc) {
     _interval += to_inc;
   }
+
+  unsigned long get_passed() {
+    return millis() - _prev_millis;
+  }
+
+  int get_interval() {
+    return _interval;
+  }
   
   bool passed() {
     bool passed = false;

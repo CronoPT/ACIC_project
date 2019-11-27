@@ -18,6 +18,10 @@ class counter {
     return count;
   }
 
+  void reset() {
+    _count = 0;
+  }
+
   int get_count() { 
     return _count;
   }

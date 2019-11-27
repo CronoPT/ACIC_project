@@ -37,9 +37,7 @@ void i2c_post_office::send_message(message* msg) {
   Wire.write((byte)(stamp>>16));
   Wire.write((byte)(stamp>>8));
   Wire.write((byte) stamp);
-  Serial.println("Ending transmission");
   Wire.endTransmission();
-  Serial.println("Endededed transmission");
 }
 
 message* i2c_post_office::receive_message() {
