@@ -1,3 +1,5 @@
+/* FILENAME - configs.h */
+
 #ifndef __CONFIGS_H__
 #define __CONFIGS_H__
 

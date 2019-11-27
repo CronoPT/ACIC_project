@@ -1,3 +1,5 @@
+/* FILENAME - intersept_mode.h */
+
 #ifndef __INTERSEPT_MODE_H__
 #define __INTERSEPT_MODE_H__
 
@@ -47,7 +49,7 @@ class intersept_mode {
   
   public:
   virtual void operate() = 0;
-  
+
   intersept* get_intersept() const { return _intersept; }
   interval* get_main_interval() const { return _main_interval; }
   interval* get_yellow_interval() const { return _yellow_interval; }

@@ -1,3 +1,5 @@
+/* FILENAME - mode_0.h */
+
 #ifndef __MODE_0_H__
 #define __MODE_0_H__
 

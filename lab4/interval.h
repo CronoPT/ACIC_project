@@ -1,3 +1,5 @@
+/* FILENAME - interval.h */
+
 #ifndef __INTERVAL_H__
 #define __INTERVAL_H__
 

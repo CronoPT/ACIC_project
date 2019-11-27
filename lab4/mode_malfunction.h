@@ -1,3 +1,5 @@
+/* FILENAME - mode_malfunction.h */
+
 #ifndef __MODE_MALFUNCTION_H__
 #define __MODE_MALFUNCTION_H__
 

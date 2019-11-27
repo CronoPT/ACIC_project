@@ -1,3 +1,5 @@
+/* FILENAME - queue.cpp */
+
 #include "queue.h"
 
 bool queue::empty() {
