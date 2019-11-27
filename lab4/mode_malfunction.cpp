@@ -8,6 +8,7 @@ mode_malfunction::mode_malfunction(intersept* interseption,
   _broke_s(broke_s) { /*Do Nothing*/ }
 
 void mode_malfunction::operate() {
+  /* Time to blink */
   if(get_yellow_interval()->passed()){
     if(get_yellow()){
       get_intersept()->get_light_s()->all_off();
@@ -22,6 +23,7 @@ void mode_malfunction::operate() {
     set_yellow_interval(new interval(UNIT));
   }
 
+  /* Check if the led is back on, return to normal operation */
   if(!get_yellow()) {
     if(_broke_s) {
       get_intersept()->get_light_s()->red_on();

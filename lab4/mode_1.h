@@ -4,6 +4,10 @@
 #include "intersept_mode.h"
 
 class mode_1: public intersept_mode {
+  /* 
+  | Duty cycle on current cycle (percentage of time 
+  | the green light on the south is on) 
+  */
   float _duty_cycle;
 
   public:

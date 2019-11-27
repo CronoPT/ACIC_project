@@ -7,10 +7,34 @@
 class intersept;
 
 class intersept_mode {
+  /*
+  | The interception whose behavior the
+  | mode is implementing
+  */
   intersept* _intersept;
+
+  /*
+  | Interval for red/green lights
+  */
   interval*  _main_interval;
+
+  /*
+  | Interval for yellow lights
+  */
   interval*  _yellow_interval;
+
+  /*
+  | If the green light in the south is on
+  | it is true (1st half of the cycle)
+  | If the green light in the west is on
+  | it is false (2nd half of the cycle)
+  */
   bool _s_green;
+
+  /*
+  | If the lights are yellow it is true
+  | If they are not it is false
+  */
   bool _yellow;
 
   protected:
@@ -23,7 +47,7 @@ class intersept_mode {
   
   public:
   virtual void operate() = 0;
-
+  
   intersept* get_intersept() const { return _intersept; }
   interval* get_main_interval() const { return _main_interval; }
   interval* get_yellow_interval() const { return _yellow_interval; }

@@ -7,7 +7,10 @@
 class message;
 
 class i2c_post_office {
+  /* Queue of messages */
   queue _queue;
+
+  /* Singleton -> private constructor */
   i2c_post_office():_queue() { /*Do Nothing*/ }
 
   public:
@@ -16,12 +19,14 @@ class i2c_post_office {
       return instance;
   }
 
+  /* Singleton -> disable copy constructor */
   i2c_post_office(i2c_post_office const&);
+
+  /* Singleton -> disable assignment operator */
   void operator=(i2c_post_office const&);
 
   void init_post_office(byte address);
   void send_message(message* msg);
-  message* receive_message();
   message* get_latest();
   void add_message(message* msg);
   bool has_messages();

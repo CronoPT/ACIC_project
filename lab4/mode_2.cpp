@@ -7,6 +7,7 @@
 #define EAST 2
 #define WEST 3
 #define T_BETWEEN_INTER 6
+#define TOLERANCE 1
 
 mode_2::mode_2(intersept* interseption):
   intersept_mode(interseption),
@@ -17,9 +18,22 @@ mode_2::mode_2(intersept* interseption):
   i2c_post_office::get_instance().init_post_office(interseption->get_address());
 }
 
+
+/*===================================================================
+| operate:
+|   * params none
+|   * returns nothing
+|
+| This fucntion will run on the main loop of the program and it is 
+| reponsible for implementing the behavior associated with
+| mode_2
+===================================================================*/
 void mode_2::operate() {
+  /* Check for cars passing by (button presses) */
   get_intersept()->get_s_counter()->check_inc();
   get_intersept()->get_w_counter()->check_inc();
+
+  /* If there are messages, read one and do adjustments */
   if(i2c_post_office::get_instance().has_messages()) {
     message* msg = i2c_post_office::get_instance().get_latest();
     msg->print();
@@ -27,17 +41,21 @@ void mode_2::operate() {
     delete msg;
   }
 
+  /* Yellow light on */
   if(get_yellow()){
+    /* It is time to go green/red */
     if(get_yellow_interval()->passed()) {
       set_s_green(!get_s_green());
       set_yellow(false);
       set_main_interval(new interval(compute_right_time()+_increments));
       _increments = 0;
       delete get_yellow_interval();
+      /* Starting a new cycle */
       if(get_s_green()) {
         get_intersept()->get_light_s()->gre_on();
         get_intersept()->get_light_w()->red_on();
       }
+      /* Going into the 2nd part of the current cycle */
       else {
         get_intersept()->get_light_s()->red_on();
         get_intersept()->get_light_w()->gre_on();
@@ -45,7 +63,9 @@ void mode_2::operate() {
       build_send_message();
     }
   }
+  /* Yellow light off */
   else {
+    /* It is time to go yellow */
     if(get_main_interval()->passed()) {
       get_intersept()->get_light_s()->yel_on();
       get_intersept()->get_light_w()->yel_on();
@@ -54,7 +74,11 @@ void mode_2::operate() {
       delete get_main_interval(); 
     }
 
-    /*Detection of broken led*/
+    /* 
+    | Detection of broken led. If the led
+    | is broke, then we change the functioning
+    | mode off the interception
+    */
     if(get_s_green())
       if(get_intersept()->get_light_w()->red_broke())
         get_intersept()->set_mode(
@@ -68,6 +92,18 @@ void mode_2::operate() {
   }
 }
 
+/*===================================================================
+| compute_right_time:
+|   * params none
+|   * returns:
+|     * the time interval that the next green or red light should be
+|       on
+|
+| This will run every period, essecially, if we are going to phase
+| zero (begin of a cycle) it computes the new duty_cycle and returns
+| the total period times that, otherwise it will return 1-duty_cycle
+| times the period
+===================================================================*/
 int mode_2::compute_right_time() {
   float res = 0.0;
 
@@ -93,6 +129,15 @@ int mode_2::compute_right_time() {
   return res*PERIOD*UNIT;
 }
 
+/*===================================================================
+| build_send_message:
+|   * params none
+|   * returns nothing
+|
+| This function just builds a message based on the state of
+| our interception and the sends the message to the
+| i2c_post_office
+===================================================================*/
 void mode_2::build_send_message() {
   for(int i=0; i<4; i++){
     byte source = get_intersept()->get_address();
@@ -110,6 +155,14 @@ void mode_2::build_send_message() {
     message to_send(destination, source, event, cars_N, cars_S, cars_E, cars_W);
     i2c_post_office::get_instance().send_message(&to_send);
   }
+
+  /*
+  | The code bellow makes sure that, in each message we send
+  | only information regarding the last control period,
+  | not the whole period (whole 20 seconds)
+  | If the green light on the south is supposed to be on
+  | then we started a new cycle so we should reset the counters
+  */
   if(get_s_green()) {
     get_intersept()->get_s_counter()->reset();
     get_intersept()->get_w_counter()->reset();
@@ -122,7 +175,27 @@ void mode_2::build_send_message() {
   }
 }
 
+
+/*===================================================================
+| adjust_phase:
+|   * params:
+|     * msg -> message in which we will base our decision of phase
+|     adjustment
+|   * returns nothing
+| 
+| This function will try to adjust the phase of our controller
+| based on information from other controllers. First we extract
+| information about the other controller (from the message).
+| Then, based on that information we see if it is even a controller
+| with which we should try to adjust phases with and finally
+| we come up with our decision: if we shoulf increase our period,
+| decresease it, or keep it unchanged.
+===================================================================*/
 void mode_2::adjust_phase(message* msg) {
+  /*
+  | Determine direction of maximum traffic
+  | in our controller
+  */
   int our_dir = -1;
   if(get_intersept()->get_s_counter()>get_intersept()->get_w_counter())
     our_dir = get_intersept()->get_s() ? SOUTH : NORTH;
@@ -149,6 +222,10 @@ void mode_2::adjust_phase(message* msg) {
     return;
   }
 
+  /*
+  | Determine direction of maximum traffic 
+  | on the other controller
+  */
   int oth_dir = -1;
   if(max_cars==oth_cars_N)
     oth_dir = NORTH;
@@ -159,6 +236,12 @@ void mode_2::adjust_phase(message* msg) {
   else if(max_cars==oth_cars_W) 
     oth_dir = WEST;
   
+  /*
+  | Is the maximum traffic from both controllers
+  | coming from the same direction?
+  | If some, keep in going
+  | Return otherwise
+  */
   if(our_dir!=oth_dir) {
     Serial.println("Return cause diff directions");
     return;
@@ -170,6 +253,10 @@ void mode_2::adjust_phase(message* msg) {
   Serial.print("Our direction-> ");
   Serial.println(our_dir);
 
+  /*
+  | Orietation is fine, but we still need to check
+  | our interceptions are placed relative to each other
+  */
   if(our_dir==NORTH) {
     if(get_intersept()->get_y()>oth_y) return;
   }
@@ -221,12 +308,14 @@ void mode_2::adjust_phase(message* msg) {
   if(oth_phase<our_phase)
     oth_phase+=20;
   int diff = oth_phase-our_phase;
-  if(diff+1==6||diff-1==6||diff==6){
+  if(diff+TOLERANCE=T_BETWEEN_INTER  ||
+     diff-TOLERANCE==T_BETWEEN_INTER ||
+     diff==T_BETWEEN_INTER){
     Serial.println("Return cause alreaddy alligned");
     return;
   }
 
-  if(diff>6) {
+  if(diff>T_BETWEEN_INTER) {
     _increments = -1*UNIT;
     Serial.println("Decreasing");
   }

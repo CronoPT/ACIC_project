@@ -18,18 +18,24 @@ class intersept {
   bool _w;
   byte _address;
   byte _neigh_addrs[4];
-  int _s_green_t; 
-  int _w_green_t;
+
+  /* Operation mode */
   intersept_mode* _mode;
+
+  /* Traffic light in south direction */
   traffic_light*  _light_s;
+
+  /* Traffic light in the west direction */
   traffic_light*  _light_w;
+
+  /* Counter for cars in the south direction*/
   counter* _s_counter;
+
+  /* Counter for cars in the south direction*/
   counter* _w_counter;
   
   public:
   intersept(int mode):
-    _s_green_t(INIT_GREEN*UNIT),
-    _w_green_t(PERIOD-INIT_GREEN),
     _light_s(new traffic_light(S_RED, S_YEL, S_GRE, DETECT_PIN_S)),
     _light_w(new traffic_light(W_RED, W_YEL, W_GRE, DETECT_PIN_W)),
     _s_counter(new counter(S_BUTTON)),
@@ -65,6 +71,14 @@ class intersept {
       _mode = new mode_2(this);
   }
   
+  /*===================================================================
+  | operate:
+  |   * params none
+  |   * returns nothing
+  | 
+  | This function runs in the main loop. It is delegating the behavior
+  | on the mode
+  ===================================================================*/
   void operate() { _mode->operate(); }
 
   int get_x() const { return _x; }
@@ -73,8 +87,6 @@ class intersept {
   bool get_w() const { return _w; }
   byte get_address() const { return _address; }
   byte* get_neigh_addrs() const { return _neigh_addrs; }
-  int get_s_green_t() const { return _s_green_t; }
-  int get_w_green_t() const { return _w_green_t; }
   traffic_light* get_light_s() const { return _light_s; }
   traffic_light* get_light_w() const { return _light_w; }
   counter* get_s_counter() const { return _s_counter; }
@@ -94,16 +106,16 @@ class intersept {
   }
 
   int init_x() {
-    int x = (int) (analogRead(A2) > 100 ? 1 : 0);
-    x = (x*2) + (int) (analogRead(A1) > 100 ? 1 : 0);
-    x = (x*2) + (int) (analogRead(A0) > 100 ? 1 : 0);
+    int x = (int) (analogRead(a2) > 100 ? 1 : 0);
+    x = (x*2) + (int) (analogRead(a1) > 100 ? 1 : 0);
+    x = (x*2) + (int) (analogRead(a0) > 100 ? 1 : 0);
     return x;
   }
 
   int init_y() {
-    int y = (int) (digitalRead(10)==HIGH ? 1 : 0);
-    y = (y*2) + (int) (digitalRead(11)==HIGH ? 1 : 0);
-    y = (y*2) + (int) (digitalRead(12)==HIGH ? 1 : 0);
+    int y = (int) (digitalRead(b2)==HIGH ? 1 : 0);
+    y = (y*2) + (int) (digitalRead(b1)==HIGH ? 1 : 0);
+    y = (y*2) + (int) (digitalRead(b0)==HIGH ? 1 : 0);
     return y;
   }
 
