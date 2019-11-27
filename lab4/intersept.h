@@ -99,17 +99,28 @@ class intersept {
     pinMode(b1, INPUT);
     pinMode(b2, INPUT);
     pinMode(a0, INPUT);
-    pinMode(a1, INPUT);
-    pinMode(a2, INPUT);
     pinMode(DS, INPUT);
     pinMode(DW, INPUT);
   }
 
   int init_x() {
-    int x = (int) (analogRead(a2) > 100 ? 1 : 0);
-    x = (x*2) + (int) (analogRead(a1) > 100 ? 1 : 0);
-    x = (x*2) + (int) (analogRead(a0) > 100 ? 1 : 0);
-    return x;
+    int analog_value = (int) (analogRead(a0));
+    if(analog_value<50)
+      return 0;
+    else if(analog_value<220)
+      return 1;
+    else if(analog_value<350)
+      return 2;
+    else if(analog_value<480)
+      return 3;
+    else if(analog_value<600)
+      return 4;
+    else if(analog_value<720)
+      return 5;
+    else if(analog_value<840)
+      return 6;
+    else
+      return 7;
   }
 
   int init_y() {

@@ -21,11 +21,9 @@
 
 /* Bits for the X coordinate */
 #define a0 A0
-#define a1 A1
-#define a2 A2
 
-#define DETECT_PIN_S A4
-#define DETECT_PIN_W A5
+#define DETECT_PIN_S A1
+#define DETECT_PIN_W A2
 
 /* Bits for the cardinal points */
 #define DS 13

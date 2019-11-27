@@ -21,7 +21,7 @@ class traffic_light {
   }
 
   bool red_broke() {
-    return !analogRead(_detection_pin) > 100;
+    return !(analogRead(_detection_pin) > 100);
   }
 
   void red_on() const {
